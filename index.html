@@ -161,52 +161,50 @@
                 const mobileconfig = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-    <key>PayloadContent</key>
-    <array>
-        <dict>
-            <key>DNSSettings</key>
-            <dict>
-                <key>DNSProtocol</key>
-                <string>HTTPS</string>
-                <key>ServerAddresses</key>
-                <array>
-                    <string>${currentProfileUrl}</string>
-                </array>
-                <key>ServerURL</key>
-                <string>${currentProfileUrl}</string>
-            </dict>
-            <key>PayloadDescription</key>
-            <string>配置自定义DNS over HTTPS服务器</string>
-            <key>PayloadDisplayName</key>
-            <string>AdGuardHome DNS (${phone})</string>
-            <key>PayloadIdentifier</key>
-            <string>com.adguardhome.dns.${phone}</string>
-            <key>PayloadType</key>
-            <string>com.apple.dnsSettings.managed</string>
-            <key>PayloadUUID</key>
-            <string>${uuid}</string>
-            <key>PayloadVersion</key>
-            <integer>1</integer>
-        </dict>
-    </array>
-    <key>PayloadDescription</key>
-    <string>AdGuardHome DNS配置</string>
-    <key>PayloadDisplayName</key>
-    <string>AdGuardHome DNS配置</string>
-    <key>PayloadIdentifier</key>
-    <string>com.adguardhome.profile.${phone}</string>
-    <key>PayloadOrganization</key>
-    <string>AdGuardHome</string>
-    <key>PayloadRemovalDisallowed</key>
-    <false/>
-    <key>PayloadType</key>
-    <string>Configuration</string>
-    <key>PayloadUUID</key>
-    <string>${uuid}</string>
-    <key>PayloadVersion</key>
-    <integer>1</integer>
-</dict>
+	<dict>
+		<key>PayloadContent</key>
+		<array>
+			<dict>
+				<key>DNSSettings</key>
+				<dict>
+					<key>DNSProtocol</key>
+					<string>HTTPS</string>
+					<key>ServerURL</key>
+					<string>https://zzj.sggg3326.top/dns-query/1</string>
+				</dict>
+				<key>PayloadDescription</key>
+				<string>可能广告过滤得不是很完美，请见谅，毕竟免费的还要啥自行车。看不惯就删除吧</string>
+				<key>PayloadDisplayName</key>
+				<string>不完美去广告2025</string>
+				<key>PayloadIdentifier</key>
+				<string>com.apple.dnsSettings.managed.081ffd1c-f4eb-4645-a9cb-01fa1750bd2c</string>
+          <key>PayloadOrganization</key>
+			    <string>不是很完美请见谅</string>				
+				<key>PayloadType</key>
+				<string>com.apple.dnsSettings.managed</string>
+				<key>PayloadUUID</key>
+				<string>1793f8e9-a03e-4b0b-b810-c86117bf823d</string>
+				<key>PayloadVersion</key>
+				<integer>1</integer>
+			</dict>
+		</array>
+		<key>PayloadDescription</key>
+		<string>可能广告过滤得不是很完美，请见谅，毕竟免费的还要啥自行车。看不惯就删除吧</string>
+		<key>PayloadDisplayName</key>
+		<string>不完美去广告2025</string>
+		<key>PayloadIdentifier</key>
+		<string>b489bfcf-d303-4672-a862-392737c98c3e</string>
+		<key>PayloadRemovalDisallowed</key>
+		<false/>
+        <key>PayloadOrganization</key>
+        <string>有问题联系微信：iot_hh7999。</string>	
+		<key>PayloadType</key>
+		<string>Configuration</string>
+		<key>PayloadUUID</key>
+		<string>8cbf6e77-eba6-45fb-875e-610aef84d39c</string>
+		<key>PayloadVersion</key>
+		<integer>1</integer>
+	</dict>
 </plist>`;
                 
                 const blob = new Blob([mobileconfig], { type: 'application/x-apple-aspen-config' });
