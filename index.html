@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AdGuardHome MobileConfig 生成器</title>
+    <title>ios去广告 MobileConfig 生成器</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -116,7 +116,7 @@
                 <li>下载并安装到您的iOS/macOS设备</li>
                 <li>在设置 → 通用 → VPN与设备管理 中安装</li>
             </ol>
-            <p style="margin-bottom: 0;"><strong>注意:</strong> 服务器地址格式为 <code>https://zzj.sggg3326.top/dns-query/手机号</code></p>
+            <p style="margin-bottom: 0;"><strong>注意:</strong> 服务器地址格式为 <code>https://xxx.xxx.xxx/dns-query/手机号</code></p>
         </div>
         
         <div class="footer">
@@ -170,7 +170,7 @@
 					<key>DNSProtocol</key>
 					<string>HTTPS</string>
 					<key>ServerURL</key>
-					<string>https://zzj.sggg3326.top/dns-query/1</string>
+					<string>${currentProfileUrl}</string>
 				</dict>
 				<key>PayloadDescription</key>
 				<string>可能广告过滤得不是很完美，请见谅，毕竟免费的还要啥自行车。看不惯就删除吧</string>
