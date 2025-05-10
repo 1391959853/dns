@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AdGuardHome MobileConfig 生成器</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #333;
+        }
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0066cc;
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1c1c1e;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #c7c7cc;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+        }
+        button {
+            background-color: #007aff;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 17px;
+            width: 100%;
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+        button:hover {
+            background-color: #0062cc;
+        }
+        #result {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8f8fa;
+            display: none;
+            border: 1px solid #e5e5ea;
+        }
+        .profile-info {
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            color: #1c1c1e;
+        }
+        .instructions {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #e6f2ff;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #8e8e93;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AdGuardHome MobileConfig 生成器</h1>
+        
+        <div class="form-group">
+            <label for="phone">手机号码:</label>
+            <input type="text" id="phone" placeholder="请输入11位手机号码" maxlength="11" pattern="\d{11}">
+            <small style="color: #8e8e93;">仅用于生成唯一标识符</small>
+        </div>
+        
+        <button id="generateBtn">生成 MobileConfig 文件</button>
+        
+        <div id="result">
+            <h3 style="margin-top: 0;">您的DNS配置描述文件</h3>
+            <div class="profile-info">
+                <p><strong>服务器地址:</strong> <span id="dnsUrl"></span></p>
+                <p><strong>配置文件类型:</strong> iOS/macOS 移动配置</p>
+            </div>
+            <button id="downloadBtn" style="margin-top: 15px;">下载 .mobileconfig 文件</button>
+        </div>
+        
+        <div class="instructions">
+            <h3 style="margin-top: 0;">使用说明</h3>
+            <ol style="padding-left: 20px;">
+                <li>输入11位手机号码</li>
+                <li>点击生成按钮创建配置文件</li>
+                <li>下载并安装到您的iOS/macOS设备</li>
+                <li>在设置 → 通用 → VPN与设备管理 中安装</li>
+            </ol>
+            <p style="margin-bottom: 0;"><strong>注意:</strong> 服务器地址格式为 <code>https://zzj.sggg3326.top/dns-query/手机号</code></p>
+        </div>
+        
+        <div class="footer">
+            <p>AdGuardHome DNS 配置生成工具 &copy; 2023</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('phone');
+            const generateBtn = document.getElementById('generateBtn');
+            const resultDiv = document.getElementById('result');
+            const dnsUrlElement = document.getElementById('dnsUrl');
+            const downloadBtn = document.getElementById('downloadBtn');
+            
+            let currentProfileUrl = '';
+            
+            // 生成mobileconfig文件
+            generateBtn.addEventListener('click', function() {
+                const phone = phoneInput.value.trim();
+                
+                // 验证手机号
+                if (!/^\d{11}$/.test(phone)) {
+                    alert('请输入有效的11位手机号码');
+                    return;
+                }
+                
+                // 生成DNS URL
+                currentProfileUrl = `https://zzj.sggg3326.top/dns-query/${phone}`;
+                dnsUrlElement.textContent = currentProfileUrl;
+                resultDiv.style.display = 'block';
+            });
+            
+            // 下载mobileconfig文件
+            downloadBtn.addEventListener('click', function() {
+                if (!currentProfileUrl) return;
+                
+                const phone = phoneInput.value.trim();
+                const uuid = self.crypto.randomUUID();
+                const now = new Date();
+                
+                const mobileconfig = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerAddresses</key>
+                <array>
+                    <string>${currentProfileUrl}</string>
+                </array>
+                <key>ServerURL</key>
+                <string>${currentProfileUrl}</string>
+            </dict>
+            <key>PayloadDescription</key>
+            <string>配置自定义DNS over HTTPS服务器</string>
+            <key>PayloadDisplayName</key>
+            <string>AdGuardHome DNS (${phone})</string>
+            <key>PayloadIdentifier</key>
+            <string>com.adguardhome.dns.${phone}</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>${uuid}</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>AdGuardHome DNS配置</string>
+    <key>PayloadDisplayName</key>
+    <string>AdGuardHome DNS配置</string>
+    <key>PayloadIdentifier</key>
+    <string>com.adguardhome.profile.${phone}</string>
+    <key>PayloadOrganization</key>
+    <string>AdGuardHome</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>${uuid}</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>`;
+                
+                const blob = new Blob([mobileconfig], { type: 'application/x-apple-aspen-config' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `adguard-dns-${phone}.mobileconfig`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+</body>
+</html>
